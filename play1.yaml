@@ -1,0 +1,25 @@
+---
+- name: activer le service intranet
+  hosts: node1
+  become: yes
+  tasks:
+    - name: installer le paquet http
+      yum:
+        name: httpd
+        state: latest
+
+    - name: demarrage du service http
+      service: 
+        name: http
+        enabled: httpd
+        state: started  
+
+- name: Tester le serveur web
+  hosts: localhost
+  become: no
+  tasks:
+
+    - name: connecter au web server de l'intranet
+      uri: # uri est un module nous permettant de test le serveur de l'intranet
+        url: http://node1
+        status_code: 200
